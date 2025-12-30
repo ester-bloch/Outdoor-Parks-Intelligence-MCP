@@ -1,0 +1,4 @@
+# file: C:\Users\This User\AppData\Roaming\Python\Python311\site-packages\tornado\locks.py
+# hypothesis_version: 6.148.8
+
+[100, ' waiters[%s]', '<%s', '<%s %s>', '<%s _block=%s>', '<{0} [{1}]>', '>', 'BoundedSemaphore', 'Condition', 'Event', 'Lock', 'Semaphore', 'clear', 'locked', 'set', 'unlocked,value:{0}', '{0},waiters:{1}']

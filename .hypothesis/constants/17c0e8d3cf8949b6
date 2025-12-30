@@ -1,0 +1,4 @@
+# file: C:\Users\This User\AppData\Roaming\Python\Python311\site-packages\zmq\asyncio.py
+# hypothesis_version: 6.148.8
+
+['Context', 'Poller', 'ProactorEventLoop', 'Socket', 'ZMQEventLoop', 'install', 'win32']

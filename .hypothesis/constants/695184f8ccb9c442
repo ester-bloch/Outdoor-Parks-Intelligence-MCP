@@ -1,0 +1,4 @@
+# file: C:\Users\This User\Documents\IDEs tests\Nation-Park-Mcp\src\utils\error_handler.py
+# hypothesis_version: 6.148.8
+
+['Validation error', 'api_error', 'auth_error', 'error_class', 'generic_error', 'loc', 'msg', 'rate_limit_error', 'resource_id', 'resource_not_found', 'resource_type', 'retry_after', 'type', 'validation_error', 'value_error']

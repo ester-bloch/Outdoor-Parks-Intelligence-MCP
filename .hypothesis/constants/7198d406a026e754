@@ -1,0 +1,4 @@
+# file: C:\Users\This User\Documents\IDEs tests\Nation-Park-Mcp\src\main.py
+# hypothesis_version: 6.148.8
+
+['%(prog)s 0.1.0', '--log-json', '--log-level', '--no-timestamp', '--version', 'CRITICAL', 'DEBUG', 'ERROR', 'INFO', 'WARNING', '__main__', 'console', 'json', 'keyboard_interrupt', 'server_fatal_error', 'server_shutdown', 'server_starting', 'store_true', 'version']

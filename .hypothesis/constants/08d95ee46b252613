@@ -1,0 +1,4 @@
+# file: C:\Users\This User\Documents\IDEs tests\Nation-Park-Mcp\src\handlers\get_campgrounds.py
+# hypothesis_version: 6.148.8
+
+['campgrounds', 'campgroundsByPark', 'limit', 'parkCode', 'q', 'start', 'total']

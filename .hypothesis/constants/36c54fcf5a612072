@@ -1,0 +1,4 @@
+# file: C:\Users\This User\Documents\IDEs tests\Nation-Park-Mcp\src\api\client.py
+# hypothesis_version: 6.148.8
+
+[1.0, 2.0, 30.0, 60.0, 500, 1000, '/', '/alerts', '/campgrounds', '/events', '/parks', '/visitorcenters', 'Enabled retry logic', 'GET', 'Request timed out', 'T', 'X-Api-Key', 'api_client_closed', 'api_error', 'api_key_missing', 'api_network_error', 'api_request_failed', 'api_timeout', 'api_unexpected_error', 'error', 'http_error', 'message', 'network_error', 'parkCode', 'parse_error', 'response_parsed', 'response_text', 'retry_enabled', 'status_code', 'timeout_error', 'unknown_error', 'url']

@@ -1,0 +1,4 @@
+# file: C:\Users\This User\Documents\IDEs tests\Nation-Park-Mcp\src\api\retry.py
+# hypothesis_version: 6.148.8
+
+[1.0, 2.0, 60.0, 429, 500, 502, 503, 504, 'T']

@@ -1,0 +1,4 @@
+# file: C:\Users\This User\AppData\Roaming\Python\Python311\site-packages\IPython\core\excolors.py
+# hypothesis_version: 6.148.8
+
+['LightBG', 'Linux', 'Neutral', 'NoColor', 'Normal', 'breakpoint_disabled', 'breakpoint_enabled', 'caret', 'em', 'excName', 'filename', 'filenameEm', 'line', 'lineno', 'linenoEm', 'name', 'nameEm', 'normalEm', 'nt', 'prompt', 'topline', 'vName', 'val', 'valEm']

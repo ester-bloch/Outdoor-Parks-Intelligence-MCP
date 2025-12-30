@@ -1,0 +1,4 @@
+# file: C:\Users\This User\AppData\Roaming\Python\Python311\site-packages\ipykernel\connect.py
+# hypothesis_version: 6.148.8
+
+['--existing', '-c', '.', ';', 'connect_qtconsole', 'get_connection_file', 'get_connection_info', 'key', 'qtconsoleapp.main()', 'start_new_session', 'win32']

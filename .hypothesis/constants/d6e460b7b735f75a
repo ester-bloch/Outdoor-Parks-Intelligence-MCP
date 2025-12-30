@@ -1,0 +1,4 @@
+# file: C:\Users\This User\AppData\Roaming\Python\Python311\site-packages\zmq\eventloop\zmqstream.py
+# hypothesis_version: 6.148.8
+
+['SEND Error: %s', 'Stream is closed', 'utf-8']

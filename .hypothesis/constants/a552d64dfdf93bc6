@@ -1,0 +1,4 @@
+# file: C:\Users\This User\Documents\IDEs tests\Nation-Park-Mcp\src\utils\formatters.py
+# hypothesis_version: 6.148.8
+
+[',', 'activities', 'address', 'altText', 'caption', 'code', 'contacts', 'cost', 'credit', 'description', 'designation', 'emailAddresses', 'entranceFees', 'friday', 'images', 'latitude', 'location', 'longitude', 'monday', 'name', 'number', 'operatingHours', 'phoneNumbers', 'saturday', 'standardHours', 'states', 'sunday', 'thursday', 'title', 'tuesday', 'type', 'url', 'weatherInfo', 'wednesday']

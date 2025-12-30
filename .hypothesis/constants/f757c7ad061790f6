@@ -1,0 +1,4 @@
+# file: C:\Users\This User\Documents\IDEs tests\Nation-Park-Mcp\src\utils\logging.py
+# hypothesis_version: 6.148.8
+
+[400, '%(message)s', '***REDACTED***', 'INFO', 'X-Api-Key', 'apiKey', 'api_key', 'api_request', 'api_response', 'app', 'authorization', 'duration_ms', 'error', 'event_type', 'iso', 'level', 'method', 'password', 'request', 'response', 'response_size', 'status_code', 'success', 'token', 'tool', 'tool_request', 'tool_response', 'url', 'warn', 'warning']

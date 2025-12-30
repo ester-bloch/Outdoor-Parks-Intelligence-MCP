@@ -15,6 +15,8 @@ class Settings(BaseSettings):
     nps_api_key: Optional[str] = None
     nps_api_base_url: str = "https://developer.nps.gov/api/v1"
     log_level: str = "INFO"
+    log_json: bool = False  # Whether to output logs in JSON format
+    log_include_timestamp: bool = True  # Whether to include timestamps in logs
     server_name: str = "National Parks"
 
 

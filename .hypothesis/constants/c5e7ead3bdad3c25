@@ -1,0 +1,4 @@
+# file: C:\Users\This User\Documents\IDEs tests\Nation-Park-Mcp\src\models\errors.py
+# hypothesis_version: 6.148.8
+
+[200, 400, 401, 403, 404, 422, 429, 500, 502, 503, 504, 'Error message', 'Error type', 'ErrorResponse', 'Validation error', 'api_error', 'authentication_error', 'errors', 'http_error', 'internal_error', 'invalid_input', 'loc', 'missing_api_key', 'msg', 'network_error', 'not_found', 'parse_error', 'rate_limit_error', 'resource_not_found', 'timeout_error', 'type', 'unknown_error', 'validation_error', 'value_error']
