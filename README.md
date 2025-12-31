@@ -74,9 +74,6 @@ python-mcp-nationalparks
 
 ### Quick Demo (2 minutes)
 
-This project is intended to be demoed as an **MCP stdio server** (Claude Desktop compatible).
-For interview/demo safety, it also includes a minimal **dependency-free** demo client.
-
 1) Install dependencies
 
 ```bash
