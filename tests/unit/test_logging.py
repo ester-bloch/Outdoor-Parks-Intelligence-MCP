@@ -1,10 +1,6 @@
 """Unit tests for structured logging."""
 
 import logging
-from io import StringIO
-
-import pytest
-import structlog
 
 from src.utils.logging import (
     censor_sensitive_data,

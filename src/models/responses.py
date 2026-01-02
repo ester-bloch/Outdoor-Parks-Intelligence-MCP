@@ -1,6 +1,6 @@
 """Pydantic models for NPS API responses."""
 
-from typing import Any, Dict, Generic, List, Optional, TypeVar
+from typing import Any, Generic, List, TypeVar
 
 from pydantic import BaseModel, ConfigDict, Field
 

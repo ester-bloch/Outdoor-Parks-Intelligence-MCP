@@ -5,7 +5,7 @@ Requirements: 3.2, 3.3, 3.4
 """
 
 import time
-from unittest.mock import MagicMock, Mock, patch
+from unittest.mock import Mock, patch
 
 import httpx
 import pytest
@@ -21,7 +21,7 @@ class TestNPSAPIClient:
     def test_client_initialization_with_api_key(self):
         """Test that client initializes with API key in headers."""
         with patch("httpx.Client") as mock_client_class:
-            client = NPSAPIClient(
+            _ = NPSAPIClient(
                 api_key="test-key", enable_rate_limiting=False, enable_retry=False
             )
 
@@ -34,7 +34,7 @@ class TestNPSAPIClient:
     def test_client_initialization_without_api_key(self):
         """Test that client initializes without API key."""
         with patch("httpx.Client") as mock_client_class:
-            client = NPSAPIClient(
+            _ = NPSAPIClient(
                 api_key=None, enable_rate_limiting=False, enable_retry=False
             )
 
@@ -47,7 +47,7 @@ class TestNPSAPIClient:
         """Test that client uses custom base URL."""
         custom_url = "https://custom.api.com/v2"
         with patch("httpx.Client") as mock_client_class:
-            client = NPSAPIClient(
+            _ = NPSAPIClient(
                 base_url=custom_url, enable_rate_limiting=False, enable_retry=False
             )
 
@@ -487,7 +487,7 @@ class TestAPIClientIntegration:
 
     def test_global_client_instance(self):
         """Test global client instance management."""
-        from src.api.client import _client, close_client, get_client
+        from src.api.client import close_client, get_client
 
         with patch("httpx.Client"):
             # Get client instance

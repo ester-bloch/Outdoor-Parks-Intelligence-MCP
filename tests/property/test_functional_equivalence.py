@@ -1,5 +1,3 @@
-
-
 import json
 from unittest.mock import Mock, patch
 
@@ -12,8 +10,6 @@ from src.constants import STATE_CODES
 from src.handlers.find_parks import find_parks
 from src.handlers.get_park_details import get_park_details
 from src.models.requests import FindParksRequest, GetParkDetailsRequest
-
-
 
 
 @pytest.fixture(autouse=True)
@@ -168,7 +164,6 @@ def mock_api_client():
     q=st.one_of(st.none(), st.text(min_size=1, max_size=50)),
 )
 def test_find_parks_response_structure(mock_api_client, state_code, limit, q):
-
     request = FindParksRequest(stateCode=state_code, q=q, limit=limit)
     result = find_parks(request)
 
@@ -212,7 +207,6 @@ def test_find_parks_response_structure(mock_api_client, state_code, limit, q):
     )
 )
 def test_find_parks_invalid_state_error_handling(mock_api_client, state_code):
- 
     request = FindParksRequest(stateCode=state_code)
     result = find_parks(request)
 
@@ -232,7 +226,6 @@ def test_find_parks_invalid_state_error_handling(mock_api_client, state_code):
 @settings(max_examples=20, suppress_health_check=[HealthCheck.function_scoped_fixture])
 @given(park_code=st.text(min_size=1, max_size=10))
 def test_get_park_details_response_structure(mock_api_client, park_code):
- 
     request = GetParkDetailsRequest(parkCode=park_code)
     result = get_park_details(request)
 
@@ -268,7 +261,6 @@ def test_get_park_details_response_structure(mock_api_client, park_code):
 @settings(max_examples=15, suppress_health_check=[HealthCheck.function_scoped_fixture])
 @given(park_code=st.text(min_size=1, max_size=10))
 def test_get_park_details_not_found_error(mock_api_client, park_code):
-   
     # Configure mock to return empty data
     mock_api_client.get_park_by_code.return_value = {
         "total": "0",
@@ -292,7 +284,6 @@ def test_get_park_details_not_found_error(mock_api_client, park_code):
     limit=st.one_of(st.none(), st.integers(min_value=1, max_value=50)),
 )
 def test_handler_response_serialization(mock_api_client, limit):
- 
     from src.handlers.get_alerts import get_alerts
     from src.models.requests import GetAlertsRequest
 
@@ -317,7 +308,6 @@ def test_handler_response_serialization(mock_api_client, limit):
     start=st.integers(min_value=0, max_value=100),
 )
 def test_pagination_parameters_consistency(mock_api_client, limit, start):
-   
     from src.handlers.get_visitor_centers import get_visitor_centers
     from src.models.requests import GetVisitorCentersRequest
 
@@ -346,7 +336,6 @@ def test_pagination_parameters_consistency(mock_api_client, limit, start):
 
 
 def test_all_handlers_have_consistent_error_handling(mock_api_client):
- 
     from src.handlers.get_campgrounds import get_campgrounds
     from src.handlers.get_events import get_events
     from src.models.requests import GetCampgroundsRequest, GetEventsRequest

@@ -3,11 +3,12 @@
 import logging
 from typing import Any, Dict
 
-from src.api.client import NPSAPIError, get_client
+import src.api.client as nps_client
 from src.models.requests import GetEventsRequest
 from src.models.responses import EventData, NPSResponse
 from src.utils.formatters import format_event_data
 
+get_client = nps_client.get_client
 logger = logging.getLogger(__name__)
 
 
@@ -73,6 +74,6 @@ def get_events(request: GetEventsRequest) -> Dict[str, Any]:
         }
 
         return result
-    except NPSAPIError as e:
+    except nps_client.NPSAPIError as e:
         logger.error(f"Failed to get events: {e.message}")
         raise

@@ -3,12 +3,13 @@
 import logging
 from typing import Any, Dict
 
-from src.api.client import NPSAPIError, get_client
+import src.api.client as nps_client
 from src.models.requests import GetParkDetailsRequest
 from src.models.responses import NPSResponse, ParkData
 from src.utils.error_handler import handle_not_found_error
 from src.utils.formatters import format_park_details
 
+get_client = nps_client.get_client
 logger = logging.getLogger(__name__)
 
 
@@ -49,6 +50,6 @@ def get_park_details(request: GetParkDetailsRequest) -> Dict[str, Any]:
         logger.info(f"Successfully retrieved details for park: {park_details['name']}")
         return park_details
 
-    except NPSAPIError as e:
+    except nps_client.NPSAPIError as e:
         logger.error(f"Failed to get park details: {e.message}")
         raise

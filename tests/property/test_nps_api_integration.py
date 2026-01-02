@@ -4,18 +4,15 @@ Feature: python-mcp-server, Property 5: NPS API Integration Consistency
 Validates: Requirements 1.5
 """
 
-from datetime import datetime, timedelta
-from unittest.mock import Mock, call, patch
+from unittest.mock import Mock, patch
 
 import httpx
 import pytest
-from hypothesis import HealthCheck, assume, given, settings
+from hypothesis import given, settings
 from hypothesis import strategies as st
 
 from src.api.client import NPSAPIClient, NPSAPIError
 from src.api.rate_limit import RateLimiter
-from src.config import settings as app_settings
-
 
 
 @settings(max_examples=50)
@@ -31,7 +28,6 @@ from src.config import settings as app_settings
     ),
 )
 def test_api_client_supports_all_nps_endpoints(endpoint, params):
-  
     with patch("httpx.Client") as mock_client_class:
         mock_client_instance = Mock()
         mock_response = Mock()
@@ -82,7 +78,6 @@ def test_api_client_supports_all_nps_endpoints(endpoint, params):
     requests_count=st.integers(min_value=1, max_value=10),
 )
 def test_api_client_maintains_authentication_across_requests(api_key, requests_count):
- 
     with patch("httpx.Client") as mock_client_class:
         mock_client_instance = Mock()
         mock_response = Mock()
@@ -120,13 +115,8 @@ def test_api_client_maintains_authentication_across_requests(api_key, requests_c
 def test_api_client_rate_limiting_respects_constraints(
     requests_per_hour, request_burst_size
 ):
- 
     # Create a rate limiter with the given configuration
     rate_limiter = RateLimiter(requests_per_hour=requests_per_hour)
-
-    # Calculate tokens per request
-    tokens_per_request = 1.0
-    total_tokens_needed = request_burst_size * tokens_per_request
 
     # Try to acquire tokens for a burst of requests
     tokens_acquired = 0
@@ -155,7 +145,6 @@ def test_api_client_rate_limiting_respects_constraints(
     ),
 )
 def test_api_client_handles_all_http_error_codes(status_codes):
-   
     with patch("httpx.Client") as mock_client_class:
         mock_client_instance = Mock()
 
@@ -205,7 +194,6 @@ def test_api_client_handles_all_http_error_codes(status_codes):
     query_value=st.text(min_size=1, max_size=30),
 )
 def test_api_client_query_parameter_handling(endpoint, query_param, query_value):
- 
     with patch("httpx.Client") as mock_client_class:
         mock_client_instance = Mock()
         mock_response = Mock()
@@ -244,12 +232,11 @@ def test_api_client_query_parameter_handling(endpoint, query_param, query_value)
     timeout_seconds=st.floats(min_value=5.0, max_value=60.0),
 )
 def test_api_client_timeout_configuration(timeout_seconds):
-
     with patch("httpx.Client") as mock_client_class:
         mock_client_instance = Mock()
         mock_client_class.return_value = mock_client_instance
 
-        client = NPSAPIClient(
+        _ = NPSAPIClient(
             api_key="test",
             timeout=timeout_seconds,
             enable_rate_limiting=False,
@@ -258,8 +245,8 @@ def test_api_client_timeout_configuration(timeout_seconds):
 
         # Verify timeout was set during initialization
         init_call_args = mock_client_class.call_args
-        timeout = init_call_args.kwargs.get("timeout")
-        assert timeout == timeout_seconds, "Timeout should match configuration"
+        timeout_value = init_call_args.kwargs.get("timeout")
+        assert timeout_value == timeout_seconds, "Timeout should match configuration"
 
 
 @settings(max_examples=50)
@@ -276,7 +263,6 @@ def test_api_client_timeout_configuration(timeout_seconds):
     ),
 )
 def test_api_client_response_parsing_consistency(response_data):
-
     with patch("httpx.Client") as mock_client_class:
         mock_client_instance = Mock()
         mock_response = Mock()
@@ -307,7 +293,6 @@ def test_api_client_response_parsing_consistency(response_data):
     ),
 )
 def test_api_client_base_url_configuration(base_url, endpoint):
-
     with patch("httpx.Client") as mock_client_class:
         mock_client_instance = Mock()
         mock_response = Mock()
@@ -342,8 +327,7 @@ def test_api_client_base_url_configuration(base_url, endpoint):
     retry_delay=st.floats(min_value=0.1, max_value=5.0),
 )
 def test_api_client_retry_configuration(max_retries, retry_delay):
-
-    with patch("httpx.Client") as mock_client_class, patch("time.sleep") as mock_sleep:
+    with patch("httpx.Client") as mock_client_class, patch("time.sleep"):
         mock_client_instance = Mock()
         mock_client_class.return_value = mock_client_instance
 
@@ -367,7 +351,6 @@ def test_api_client_retry_configuration(max_retries, retry_delay):
     activity_id=st.text(min_size=1, max_size=20),
 )
 def test_api_client_convenience_methods_consistency(park_code, state_code, activity_id):
-
     with patch("httpx.Client") as mock_client_class:
         mock_client_instance = Mock()
         mock_response = Mock()
@@ -417,7 +400,6 @@ def test_api_client_convenience_methods_consistency(park_code, state_code, activ
     status_code=st.one_of(st.none(), st.integers(min_value=400, max_value=599)),
 )
 def test_api_error_response_structure_consistency(error_type, status_code):
-  
     error = NPSAPIError(
         message="Test error",
         status_code=status_code,

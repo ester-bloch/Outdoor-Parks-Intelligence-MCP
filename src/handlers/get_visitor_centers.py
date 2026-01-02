@@ -3,11 +3,12 @@
 import logging
 from typing import Any, Dict
 
-from src.api.client import NPSAPIError, get_client
+import src.api.client as nps_client
 from src.models.requests import GetVisitorCentersRequest
 from src.models.responses import NPSResponse, VisitorCenterData
 from src.utils.formatters import format_visitor_center_data
 
+get_client = nps_client.get_client
 logger = logging.getLogger(__name__)
 
 
@@ -71,6 +72,6 @@ def get_visitor_centers(request: GetVisitorCentersRequest) -> Dict[str, Any]:
         }
 
         return result
-    except NPSAPIError as e:
+    except nps_client.NPSAPIError as e:
         logger.error(f"Failed to get visitor centers: {e.message}")
         raise

@@ -54,12 +54,19 @@ class NPSAPIError(Exception):
         )
 
 
+class _UseSettingsType:
+    """Sentinel type for using settings-based API key."""
+
+
+_USE_SETTINGS = _UseSettingsType()
+
+
 class NPSAPIClient:
     """Client for interacting with the National Park Service API."""
 
     def __init__(
         self,
-        api_key: Optional[str] = None,
+        api_key: Optional[str] | _UseSettingsType = _USE_SETTINGS,
         base_url: Optional[str] = None,
         timeout: float = 30.0,
         enable_rate_limiting: bool = True,
@@ -79,7 +86,10 @@ class NPSAPIClient:
             enable_retry: Whether to enable automatic retries
             max_retries: Maximum number of retry attempts
         """
-        self.api_key = api_key or settings.nps_api_key
+        if api_key is _USE_SETTINGS:
+            self.api_key = settings.nps_api_key
+        else:
+            self.api_key = api_key
         self.base_url = base_url or settings.nps_api_base_url
 
         if not self.api_key:
@@ -204,6 +214,18 @@ class NPSAPIClient:
                 details={"error": str(e), "response_text": response.text[:500]},
             )
 
+    def _build_url(self, endpoint: str) -> str:
+        """
+        Build a normalized endpoint path with a leading slash.
+
+        Args:
+            endpoint: API endpoint path (e.g., "/parks" or "parks")
+
+        Returns:
+            Normalized endpoint path with a leading slash
+        """
+        return f"/{endpoint.lstrip('/')}"
+
     def get(
         self, endpoint: str, params: Optional[Dict[str, Any]] = None
     ) -> Dict[str, Any]:
@@ -224,7 +246,8 @@ class NPSAPIClient:
         if self.rate_limiter:
             self.rate_limiter.acquire(tokens=1, block=True)
 
-        url = self.base_url + endpoint
+        path = self._build_url(endpoint)
+        url = self.base_url + path
         # Log the outgoing request
         log_api_request(logger, "GET", url, params)
 
@@ -234,7 +257,7 @@ class NPSAPIClient:
         error_msg = None
 
         try:
-            response = self.client.get(endpoint.lstrip("/"), params=params)
+            response = self.client.get(path, params=params)
             status_code = response.status_code
             duration_ms = (time.time() - start_time) * 1000
 

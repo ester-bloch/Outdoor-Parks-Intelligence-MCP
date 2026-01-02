@@ -5,12 +5,8 @@ Verifies MCP protocol compliance and data consistency.
 Requirements: 1.2, 2.4
 """
 
-from typing import Any, Dict
 from unittest.mock import Mock, patch
 
-import pytest
-
-from src.api.client import NPSAPIError
 from src.models.requests import (
     FindParksRequest,
     GetAlertsRequest,
@@ -19,7 +15,6 @@ from src.models.requests import (
     GetParkDetailsRequest,
     GetVisitorCentersRequest,
 )
-from src.server import NationalParksServer
 
 
 class TestFindParksE2E:
@@ -807,9 +802,9 @@ class TestMCPProtocolCompliance:
 
     def test_mcp_tool_registration(self):
         """Test that all tools are registered with MCP."""
-        from src.server import NationalParksServer
+        from src.server import NationalParksServer as Server
 
-        server = NationalParksServer()
+        server = Server()
 
         # Verify tools are registered
         assert server.mcp is not None
@@ -838,10 +833,10 @@ class TestMCPProtocolCompliance:
 
     def test_error_response_consistency(self):
         """Test that error responses are consistent across tools."""
-        from src.api.client import NPSAPIError
+        from src.api.client import NPSAPIError as APIError
 
         # Verify error structure is consistent
-        error = NPSAPIError(
+        error = APIError(
             message="API service unavailable",
             status_code=503,
             error_type="http_error",

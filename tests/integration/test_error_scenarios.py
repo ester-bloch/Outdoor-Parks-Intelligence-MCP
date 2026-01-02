@@ -5,7 +5,7 @@ Verifies graceful degradation and error recovery.
 Requirements: 1.4, 3.4
 """
 
-from unittest.mock import MagicMock, Mock, patch
+from unittest.mock import Mock, patch
 
 import httpx
 import pytest
@@ -18,7 +18,7 @@ from src.handlers.get_campgrounds import get_campgrounds
 from src.handlers.get_events import get_events
 from src.handlers.get_park_details import get_park_details
 from src.handlers.get_visitor_centers import get_visitor_centers
-from src.models.errors import ErrorResponse, ErrorType
+from src.models.errors import ErrorResponse
 from src.models.requests import (
     FindParksRequest,
     GetAlertsRequest,

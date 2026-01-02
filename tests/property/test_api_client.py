@@ -4,7 +4,7 @@ Feature: python-mcp-server, Property 3: API Client Correctness
 Validates: Requirements 3.2, 3.3, 3.4
 """
 
-from unittest.mock import MagicMock, Mock, patch
+from unittest.mock import Mock, patch
 
 import httpx
 import pytest
@@ -13,7 +13,6 @@ from hypothesis import strategies as st
 
 from src.api.client import NPSAPIClient, NPSAPIError
 from src.api.rate_limit import RateLimiter
-from src.api.retry import RetryConfig
 
 # Property 3: API Client Correctness
 # For any NPS API request, the API client should include proper authentication headers,
@@ -36,7 +35,7 @@ def test_api_client_includes_authentication_headers(api_key, endpoint):
         mock_client_class.return_value = mock_client_instance
 
         # Create client with the given API key
-        client = NPSAPIClient(
+        _ = NPSAPIClient(
             api_key=api_key, enable_rate_limiting=False, enable_retry=False
         )
 

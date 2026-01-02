@@ -5,23 +5,31 @@ from typing import Any, Dict
 from fastmcp import FastMCP
 from pydantic import ValidationError as PydanticValidationError
 
+from src.api.air_quality import AirQualityAPIError
 from src.api.client import NPSAPIError
+from src.api.weather import WeatherAPIError
 from src.config import settings
 from src.handlers import (
     find_parks,
+    get_air_quality,
     get_alerts,
     get_campgrounds,
     get_events,
+    get_park_context,
     get_park_details,
     get_visitor_centers,
+    get_weather,
 )
 from src.models.requests import (
     FindParksRequest,
+    GetAirQualityRequest,
     GetAlertsRequest,
     GetCampgroundsRequest,
     GetEventsRequest,
+    GetParkContextRequest,
     GetParkDetailsRequest,
     GetVisitorCentersRequest,
+    GetWeatherRequest,
 )
 from src.utils.error_handler import (
     handle_api_error,
@@ -159,6 +167,154 @@ class NationalParksServer:
                     logger, "getParkDetails", success=False, error="internal_error"
                 )
                 return handle_generic_error(e, context={"tool": "getParkDetails"})
+
+        # Register get_air_quality tool
+        @self.mcp.tool()
+        def getAirQuality(
+            parkCode: str | None = None,
+            latitude: float | None = None,
+            longitude: float | None = None,
+        ) -> Dict[str, Any]:
+            """
+            Get air quality data for a location or park.
+
+            Args:
+                parkCode: Optional park code to resolve location (e.g., "yose")
+                latitude: Latitude for the location
+                longitude: Longitude for the location
+
+            Returns:
+                Dictionary containing air quality data
+            """
+            log_request(
+                logger,
+                "getAirQuality",
+                {"parkCode": parkCode, "latitude": latitude, "longitude": longitude},
+            )
+
+            try:
+                request = GetAirQualityRequest(
+                    park_code=parkCode,
+                    latitude=latitude,
+                    longitude=longitude,
+                )
+                result = get_air_quality(request)
+                log_response(logger, "getAirQuality", success=True)
+                return result
+            except PydanticValidationError as e:
+                log_response(
+                    logger, "getAirQuality", success=False, error="validation_error"
+                )
+                return handle_validation_error(e)
+            except AirQualityAPIError as e:
+                log_response(logger, "getAirQuality", success=False, error=e.error_type)
+                return handle_api_error(e)
+            except Exception as e:
+                log_response(
+                    logger, "getAirQuality", success=False, error="internal_error"
+                )
+                return handle_generic_error(e, context={"tool": "getAirQuality"})
+
+        # Register get_weather tool
+        @self.mcp.tool()
+        def getWeather(
+            parkCode: str | None = None,
+            latitude: float | None = None,
+            longitude: float | None = None,
+            provider: str | None = None,
+        ) -> Dict[str, Any]:
+            """
+            Get weather data for a location or park.
+
+            Args:
+                parkCode: Optional park code to resolve location (e.g., "yose")
+                latitude: Latitude for the location
+                longitude: Longitude for the location
+                provider: Weather provider ("openweather", "open-meteo", or "auto")
+
+            Returns:
+                Dictionary containing weather data
+            """
+            log_request(
+                logger,
+                "getWeather",
+                {
+                    "parkCode": parkCode,
+                    "latitude": latitude,
+                    "longitude": longitude,
+                    "provider": provider,
+                },
+            )
+
+            try:
+                request = GetWeatherRequest(
+                    park_code=parkCode,
+                    latitude=latitude,
+                    longitude=longitude,
+                    provider=provider,
+                )
+                result = get_weather(request)
+                log_response(logger, "getWeather", success=True)
+                return result
+            except PydanticValidationError as e:
+                log_response(
+                    logger, "getWeather", success=False, error="validation_error"
+                )
+                return handle_validation_error(e)
+            except WeatherAPIError as e:
+                log_response(logger, "getWeather", success=False, error=e.error_type)
+                return handle_api_error(e)
+            except Exception as e:
+                log_response(
+                    logger, "getWeather", success=False, error="internal_error"
+                )
+                return handle_generic_error(e, context={"tool": "getWeather"})
+
+        # Register get_park_context tool
+        @self.mcp.tool()
+        def getParkContext(
+            parkCode: str,
+            weatherProvider: str | None = None,
+        ) -> Dict[str, Any]:
+            """
+            Get combined park context (NPS + weather + air quality).
+
+            Args:
+                parkCode: Park code to retrieve park context
+                weatherProvider: Weather provider ("openweather", "open-meteo", or "auto")
+
+            Returns:
+                Dictionary containing park context data
+            """
+            log_request(
+                logger,
+                "getParkContext",
+                {"parkCode": parkCode, "weatherProvider": weatherProvider},
+            )
+
+            try:
+                request = GetParkContextRequest(
+                    park_code=parkCode,
+                    weather_provider=weatherProvider,
+                )
+                result = get_park_context(request)
+                log_response(logger, "getParkContext", success=True)
+                return result
+            except PydanticValidationError as e:
+                log_response(
+                    logger, "getParkContext", success=False, error="validation_error"
+                )
+                return handle_validation_error(e)
+            except (AirQualityAPIError, WeatherAPIError) as e:
+                log_response(
+                    logger, "getParkContext", success=False, error=e.error_type
+                )
+                return handle_api_error(e)
+            except Exception as e:
+                log_response(
+                    logger, "getParkContext", success=False, error="internal_error"
+                )
+                return handle_generic_error(e, context={"tool": "getParkContext"})
 
         # Register get_alerts tool
         @self.mcp.tool()

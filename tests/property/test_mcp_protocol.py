@@ -4,8 +4,6 @@ Feature: python-mcp-server, Property 2: MCP Protocol Compliance
 Validates: Requirements 2.4, 2.5
 """
 
-import json
-
 import pytest
 from hypothesis import HealthCheck, given, settings
 from hypothesis import strategies as st
@@ -22,7 +20,7 @@ async def test_server_initialization():
     """
     Property: The server should initialize successfully and register all tools.
 
-    This verifies that the FastMCP server is properly configured and all six tools
+    This verifies that the FastMCP server is properly configured and all nine tools
     are registered with the MCP framework.
     """
     server = get_server()
@@ -35,9 +33,10 @@ async def test_server_initialization():
     assert hasattr(server.mcp, "name"), "Server should have a name attribute"
     assert server.mcp.name == "National Parks", "Server should have correct name"
 
-    # Verify tools are registered using get_tools method
-    tools = await server.mcp.get_tools()
+    # Verify tools are registered using list_tools method
+    tools = await server.mcp.list_tools()
     assert tools is not None, "Server should have tools registered"
+    assert isinstance(tools, list), "Tools should be a list"
     assert len(tools) > 0, "Server should have at least one tool registered"
 
 
@@ -51,22 +50,25 @@ async def test_server_initialization():
             "getVisitorCenters",
             "getCampgrounds",
             "getEvents",
+            "getAirQuality",
+            "getWeather",
+            "getParkContext",
         ]
     )
 )
 @pytest.mark.asyncio
 async def test_all_tools_registered(tool_name):
     """
-    Property: For any of the six expected tools, the tool should be registered.
+    Property: For any of the nine expected tools, the tool should be registered.
 
     This verifies that all required tools are properly registered with FastMCP
     and can be discovered through the MCP protocol.
     """
     server = get_server()
 
-    # Get the list of registered tools using get_tools method
-    tools = await server.mcp.get_tools()
-    tool_names = list(tools.keys())
+    # Get the list of registered tools using list_tools method
+    tools = await server.mcp.list_tools()
+    tool_names = [tool.name for tool in tools]
 
     assert tool_name in tool_names, f"Tool {tool_name} should be registered"
 
@@ -154,6 +156,9 @@ def test_error_response_structure():
             "getVisitorCenters",
             "getCampgrounds",
             "getEvents",
+            "getAirQuality",
+            "getWeather",
+            "getParkContext",
         ]
     )
 )
@@ -167,17 +172,19 @@ async def test_tool_has_documentation(tool_name):
     """
     server = get_server()
 
-    # Get the tool from the server using get_tool method
-    tool = await server.mcp.get_tool(tool_name)
+    # Get all tools using list_tools method
+    tools = await server.mcp.list_tools()
+
+    # Find the specific tool
+    tool = next((t for t in tools if t.name == tool_name), None)
 
     assert tool is not None, f"Tool {tool_name} should exist"
 
     # Verify tool has documentation
-    if hasattr(tool, "description"):
-        assert tool.description is not None, f"Tool {tool_name} should have description"
-        assert (
-            len(tool.description.strip()) > 0
-        ), f"Tool {tool_name} description should not be empty"
+    assert tool.description is not None, f"Tool {tool_name} should have description"
+    assert (
+        len(tool.description.strip()) > 0
+    ), f"Tool {tool_name} description should not be empty"
 
 
 @pytest.mark.asyncio
@@ -191,9 +198,9 @@ async def test_server_handles_multiple_tool_calls():
     server = get_server()
 
     # Verify server has multiple tools registered
-    expected_tool_count = 6  # We have 6 tools
+    expected_tool_count = 9  # We have 9 tools
 
-    tools = await server.mcp.get_tools()
+    tools = await server.mcp.list_tools()
     assert (
         len(tools) >= expected_tool_count
     ), f"Server should have at least {expected_tool_count} tools registered, got {len(tools)}"

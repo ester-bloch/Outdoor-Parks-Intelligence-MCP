@@ -2,7 +2,7 @@
 
 from typing import Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 
 class FindParksRequest(BaseModel):
@@ -164,4 +164,94 @@ class GetEventsRequest(BaseModel):
     q: Optional[str] = Field(
         None,
         description="Search term to filter events by title or description",
+    )
+
+
+class GetAirQualityRequest(BaseModel):
+    """Request model for getting air quality data."""
+
+    model_config = ConfigDict(populate_by_name=True)
+
+    park_code: Optional[str] = Field(
+        None,
+        alias="parkCode",
+        description='Optional park code to resolve location (e.g., "yose")',
+        min_length=1,
+    )
+    latitude: Optional[float] = Field(
+        None,
+        description="Latitude for the location",
+        ge=-90,
+        le=90,
+    )
+    longitude: Optional[float] = Field(
+        None,
+        description="Longitude for the location",
+        ge=-180,
+        le=180,
+    )
+
+    @model_validator(mode="after")
+    def validate_location(self) -> "GetAirQualityRequest":
+        """Ensure either parkCode or latitude/longitude are provided."""
+        if self.park_code:
+            return self
+        if self.latitude is None or self.longitude is None:
+            raise ValueError("Provide either parkCode or both latitude and longitude")
+        return self
+
+
+class GetWeatherRequest(BaseModel):
+    """Request model for getting weather data."""
+
+    model_config = ConfigDict(populate_by_name=True)
+
+    park_code: Optional[str] = Field(
+        None,
+        alias="parkCode",
+        description='Optional park code to resolve location (e.g., "yose")',
+        min_length=1,
+    )
+    latitude: Optional[float] = Field(
+        None,
+        description="Latitude for the location",
+        ge=-90,
+        le=90,
+    )
+    longitude: Optional[float] = Field(
+        None,
+        description="Longitude for the location",
+        ge=-180,
+        le=180,
+    )
+    provider: Optional[str] = Field(
+        None,
+        description='Weather provider: "openweather", "open-meteo", or "auto"',
+    )
+
+    @model_validator(mode="after")
+    def validate_location(self) -> "GetWeatherRequest":
+        """Ensure either parkCode or latitude/longitude are provided."""
+        if self.park_code:
+            return self
+        if self.latitude is None or self.longitude is None:
+            raise ValueError("Provide either parkCode or both latitude and longitude")
+        return self
+
+
+class GetParkContextRequest(BaseModel):
+    """Request model for getting park context data."""
+
+    model_config = ConfigDict(populate_by_name=True)
+
+    park_code: str = Field(
+        ...,
+        alias="parkCode",
+        description='The park code of the national park (e.g., "yose")',
+        min_length=1,
+    )
+    weather_provider: Optional[str] = Field(
+        None,
+        alias="weatherProvider",
+        description='Weather provider: "openweather", "open-meteo", or "auto"',
     )

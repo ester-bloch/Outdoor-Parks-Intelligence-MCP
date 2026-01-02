@@ -12,17 +12,7 @@ from src.models.requests import (
     GetParkDetailsRequest,
     GetVisitorCentersRequest,
 )
-from src.models.responses import (
-    AlertData,
-    CampgroundData,
-    Contacts,
-    EmailAddress,
-    EventData,
-    NPSResponse,
-    ParkData,
-    PhoneNumber,
-    VisitorCenterData,
-)
+from src.models.responses import AlertData, Contacts, NPSResponse
 
 
 class TestRequestModels:

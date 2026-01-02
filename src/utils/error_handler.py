@@ -1,6 +1,6 @@
 """Centralized error handling utilities for consistent error responses."""
 
-from typing import Any, Dict, Optional, Type
+from typing import Any, Dict, Optional
 
 from pydantic import ValidationError as PydanticValidationError
 
@@ -53,12 +53,12 @@ def handle_validation_error(exc: PydanticValidationError) -> Dict[str, Any]:
     return response.model_dump()
 
 
-def handle_api_error(exc: NPSAPIError) -> Dict[str, Any]:
+def handle_api_error(exc: Any) -> Dict[str, Any]:
     """
     Handle NPS API errors and return structured response.
 
     Args:
-        exc: NPSAPIError exception
+        exc: API exception with error_type/message/status_code fields
 
     Returns:
         Dictionary with error response
@@ -167,6 +167,31 @@ def handle_auth_error(message: str = "Authentication failed") -> Dict[str, Any]:
         message=message,
         status_code=HTTPStatusCode.UNAUTHORIZED,
         details={},
+    )
+
+    return response.model_dump()
+
+
+def handle_invalid_input_error(
+    message: str, details: Optional[Dict[str, Any]] = None
+) -> Dict[str, Any]:
+    """
+    Handle invalid input errors.
+
+    Args:
+        message: Error message
+        details: Additional context for the error
+
+    Returns:
+        Dictionary with error response
+    """
+    logger.warning("invalid_input_error", message=message)
+
+    response = ErrorResponse(
+        error=ErrorType.INVALID_INPUT,
+        message=message,
+        status_code=HTTPStatusCode.BAD_REQUEST,
+        details=details or {},
     )
 
     return response.model_dump()

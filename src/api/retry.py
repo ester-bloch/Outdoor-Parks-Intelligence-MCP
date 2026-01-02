@@ -3,7 +3,7 @@
 import logging
 import time
 from functools import wraps
-from typing import Callable, Optional, Tuple, Type, TypeVar
+from typing import Callable, Optional, Tuple, TypeVar
 
 import httpx
 
@@ -91,7 +91,7 @@ def should_retry_error(
 
 def retry_with_backoff(config: Optional[RetryConfig] = None):
     """
-    Decorator to add retry logic with exponential backoff to a function.
+    Add retry logic with exponential backoff to a function.
 
     Args:
         config: Retry configuration. If None, uses default configuration.

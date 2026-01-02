@@ -121,6 +121,9 @@ The server provides six tools for accessing National Parks data:
 - `getVisitorCenters` - Find visitor centers and operating hours
 - `getCampgrounds` - Discover campgrounds and amenities
 - `getEvents` - Find upcoming park events and programs
+- `getAirQuality` - Get air quality (AirVisual) by park code or coordinates
+- `getWeather` - Get current weather (OpenWeather or Open-Meteo fallback)
+- `getParkContext` - Combined NPS + weather + air quality snapshot
 
 ## Development
 

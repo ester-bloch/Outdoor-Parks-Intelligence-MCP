@@ -4,7 +4,6 @@ Feature: python-mcp-server, Property 4: Input Validation Consistency
 Validates: Requirements 4.2, 4.4, 4.5
 """
 
-import pytest
 from hypothesis import HealthCheck, given, settings
 from hypothesis import strategies as st
 from pydantic import ValidationError

@@ -2,14 +2,14 @@
 
 from typing import Any, Dict
 
-from src.api.client import NPSAPIError, get_client
+import src.api.client as nps_client
 from src.constants import STATE_CODES
 from src.models.requests import FindParksRequest
 from src.models.responses import NPSResponse, ParkData
-from src.utils.error_handler import handle_not_found_error
 from src.utils.formatters import format_park_data
 from src.utils.logging import get_logger
 
+get_client = nps_client.get_client
 logger = get_logger(__name__)
 
 
@@ -90,6 +90,6 @@ def find_parks(request: FindParksRequest) -> Dict[str, Any]:
         }
 
         return result
-    except NPSAPIError as e:
+    except nps_client.NPSAPIError as e:
         logger.error("find_parks_failed", error=e.message, error_type=e.error_type)
         raise
