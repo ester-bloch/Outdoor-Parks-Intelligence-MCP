@@ -27,10 +27,10 @@ The official national data source of the United States National Park Service, pr
 Configured via `NPS_API_KEY`.
 
 ### Weather
-Provider selection strategy:
 - **[Open-Meteo](https://open-meteo.com/en/docs)** (default; no API key required)
 - **[OpenWeather](https://openweathermap.org/api)** (optional; API-key based)
 
+Provider selection strategy:
 If `OPENWEATHER_API_KEY` is configured, the server attempts OpenWeather first and falls back to Open-Meteo on provider failure.
 
 ### Air Quality
@@ -241,7 +241,7 @@ developer 2/
 │   └── server.py
 ├── tests/
 │   ├── integration/
-│   │
+│   │   ---
 │   ├── property/
 │   │
 │   ├── unit/
