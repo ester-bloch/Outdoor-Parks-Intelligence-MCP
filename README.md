@@ -5,7 +5,36 @@ The server aggregates data from multiple external providers (parks, weather, air
 
 The server acts as a controlled execution layer between language models and external environmental data providers, enforcing strict contracts, predictable behavior, and operational safeguards such as retries, rate limiting, and error normalization.
 
+## Table of Contents
+
+- [Scope](#scope)
+- [Data Providers](#data-providers)
+  - [Weather](#weather)
+  - [Air Quality](#air-quality)
+- [Available MCP Tools](#available-mcp-tools)
+  - [Park & Location Tools](#park--location-tools)
+  - [Safety & Context Tools](#safety--context-tools)
+  - [Environmental Tools](#environmental-tools)
+- [Installation](#installation)
+  - [Prerequisites](#prerequisites)
+  - [Poetry](#poetry)
+  - [pip / venv](#pip--venv)
+- [Configuration](#configuration)
+  - [API Keys](#api-keys)
+- [Development and Testing](#development-and-testing)
+  - [Running Tests](#running-tests)
+  - [Code Quality](#code-quality)
+  - [Pre-commit Hooks](#pre-commit-hooks)
+- [Error Model](#error-model)
+- [Project Structure](#project-structure)
+- [Extending](#extending)
+  - [Add a Provider](#add-a-provider)
+  - [Add a Tool](#add-a-tool)
+- [Contributing](#contributing)
+- [Acknowledgments](#acknowledgments)
+
 ---
+
 
 ## Scope
 
