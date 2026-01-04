@@ -41,7 +41,8 @@ If the key is not configured, air-quality requests return a structured configura
 
 ---
 
-## MCP Tools
+## Available MCP Tools
+
 
 
 ### Park & Location Tools
