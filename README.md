@@ -46,7 +46,7 @@ If the key is not configured, air-quality requests return a structured configura
 
 ### Park & Location Tools
 
-#### `findParks`
+- #### `findParks`
 Search parks by state, keywords, and activities.
 
 #### `getParkDetails`
@@ -243,9 +243,9 @@ developer 2/
 │   ├── integration/
 │   │   ---
 │   ├── property/
-│   │
+│   │   ---
 │   ├── unit/
-│   │
+│   │   ---
 │   ├── __init__.py
 │   └── conftest.py
 ├── .env.example
