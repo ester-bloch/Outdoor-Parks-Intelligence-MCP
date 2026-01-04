@@ -22,7 +22,7 @@ All functionality is exposed via MCP tools with strict input/output schemas.
 
 ## Data Providers
 
-** [National Park Service (NPS)](https://www.nps.gov/subjects/developer/api-documentation.htm)**
+**[National Park Service (NPS)](https://www.nps.gov/subjects/developer/api-documentation.htm)**
 The official national data source of the United States National Park Service, providing Authoritative park data including parks, alerts, visitor centers, campgrounds, and events.
 Configured via `NPS_API_KEY`.
 
