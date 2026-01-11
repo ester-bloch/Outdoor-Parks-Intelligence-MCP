@@ -87,6 +87,7 @@ class OpenWeatherClient:
             base_url=self.base_url,
             timeout=timeout,
             follow_redirects=True,
+            verify=False,
         )
 
         if enable_retry:
@@ -260,6 +261,7 @@ class OpenMeteoClient:
             base_url=self.base_url,
             timeout=timeout,
             follow_redirects=True,
+            verify=False,  # Disable SSL verification for Windows compatibility
         )
 
         if enable_retry:

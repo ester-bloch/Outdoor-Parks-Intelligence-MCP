@@ -87,6 +87,7 @@ class AirQualityClient:
             base_url=self.base_url,
             timeout=timeout,
             follow_redirects=True,
+            verify=False,
         )
 
         if enable_retry:

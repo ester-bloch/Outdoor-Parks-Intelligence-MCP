@@ -108,6 +108,7 @@ class NPSAPIClient:
             headers=headers,
             timeout=timeout,
             follow_redirects=True,
+            verify=False,
         )
 
         # Wrap with retry logic if enabled
