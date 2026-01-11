@@ -1,6 +1,5 @@
 """Handler for getting air quality data."""
 
-import logging
 from typing import Any, Dict
 
 from src.api.air_quality import get_air_quality_client
@@ -12,8 +11,9 @@ from src.models.external import (
 from src.models.requests import GetAirQualityRequest
 from src.utils.error_handler import handle_invalid_input_error, handle_not_found_error
 from src.utils.geo import LocationResolutionError, resolve_park_location
+from src.utils.logging import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 
 def get_air_quality(request: GetAirQualityRequest) -> Dict[str, Any]:

@@ -1,6 +1,5 @@
 """Handler for getting detailed park information."""
 
-import logging
 from typing import Any, Dict
 
 import src.api.client as nps_client
@@ -8,9 +7,10 @@ from src.models.requests import GetParkDetailsRequest
 from src.models.responses import NPSResponse, ParkData
 from src.utils.error_handler import handle_not_found_error
 from src.utils.formatters import format_park_details
+from src.utils.logging import get_logger
 
 get_client = nps_client.get_client
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 
 def get_park_details(request: GetParkDetailsRequest) -> Dict[str, Any]:

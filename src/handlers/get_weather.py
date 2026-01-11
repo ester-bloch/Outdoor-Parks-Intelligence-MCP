@@ -1,6 +1,5 @@
 """Handler for getting weather data."""
 
-import logging
 from datetime import datetime, timezone
 from typing import Any, Dict
 
@@ -14,8 +13,9 @@ from src.models.external import WeatherResponse
 from src.models.requests import GetWeatherRequest
 from src.utils.error_handler import handle_invalid_input_error, handle_not_found_error
 from src.utils.geo import LocationResolutionError, resolve_park_location
+from src.utils.logging import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 _ALLOWED_PROVIDERS = {"auto", "openweather", "open-meteo", "open_meteo"}
 

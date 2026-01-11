@@ -1,15 +1,15 @@
 """Handler for getting visitor center information."""
 
-import logging
 from typing import Any, Dict
 
 import src.api.client as nps_client
 from src.models.requests import GetVisitorCentersRequest
 from src.models.responses import NPSResponse, VisitorCenterData
 from src.utils.formatters import format_visitor_center_data
+from src.utils.logging import get_logger
 
 get_client = nps_client.get_client
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 
 def get_visitor_centers(request: GetVisitorCentersRequest) -> Dict[str, Any]:

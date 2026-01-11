@@ -1,16 +1,16 @@
 """Handler for getting campground information."""
 
-import logging
 from typing import Any, Dict
 
 import src.api.client as nps_client
 from src.models.requests import GetCampgroundsRequest
 from src.models.responses import CampgroundData, NPSResponse
 from src.utils.formatters import format_campground_data
+from src.utils.logging import get_logger
 
 get_client = nps_client.get_client
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 
 def get_campgrounds(request: GetCampgroundsRequest) -> Dict[str, Any]:

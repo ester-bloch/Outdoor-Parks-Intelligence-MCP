@@ -1,15 +1,15 @@
 """Handler for getting park alerts and closures."""
 
-import logging
 from typing import Any, Dict
 
 import src.api.client as nps_client
 from src.models.requests import GetAlertsRequest
 from src.models.responses import AlertData, NPSResponse
 from src.utils.formatters import format_alert_data
+from src.utils.logging import get_logger
 
 get_client = nps_client.get_client
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 
 def get_alerts(request: GetAlertsRequest) -> Dict[str, Any]:
