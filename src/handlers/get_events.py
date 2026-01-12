@@ -2,6 +2,8 @@
 
 from typing import Any, Dict
 
+from pydantic import ValidationError
+
 import src.api.client as nps_client
 from src.models.requests import GetEventsRequest
 from src.models.responses import EventData, NPSResponse
@@ -51,8 +53,25 @@ def get_events(request: GetEventsRequest) -> Dict[str, Any]:
         response = client.get_events(**params)
         logger.info(f"Found {response.get('total', 0)} events")
 
-        # Parse response into Pydantic models
-        nps_response = NPSResponse[EventData](**response)
+        # Parse response items individually with graceful error handling
+        validated_data = []
+        for item in response.get("data", []):
+            try:
+                validated_item = EventData.model_validate(item)
+                validated_data.append(validated_item)
+            except ValidationError as e:
+                logger.warning(
+                    f"Validation error for event {item.get('title', 'unknown')}: {e}"
+                )
+                continue
+
+        # Create response with validated items and ensure metadata is always present
+        nps_response = NPSResponse[EventData](
+            total=response.get("total", str(len(validated_data))),
+            limit=response.get("limit", str(limit)),
+            start=response.get("start", "0"),
+            data=validated_data,
+        )
 
         # Format the response for better readability
         formatted_events = format_event_data(nps_response.data)

@@ -2,6 +2,8 @@
 
 from typing import Any, Dict
 
+from pydantic import ValidationError
+
 import src.api.client as nps_client
 from src.models.requests import GetCampgroundsRequest
 from src.models.responses import CampgroundData, NPSResponse
@@ -50,8 +52,25 @@ def get_campgrounds(request: GetCampgroundsRequest) -> Dict[str, Any]:
         response = client.get_campgrounds(**params)
         logger.info(f"Found {response.get('total', 0)} campgrounds")
 
-        # Parse response into Pydantic models
-        nps_response = NPSResponse[CampgroundData](**response)
+        # Parse response items individually with graceful error handling
+        validated_data = []
+        for item in response.get("data", []):
+            try:
+                validated_item = CampgroundData.model_validate(item)
+                validated_data.append(validated_item)
+            except ValidationError as e:
+                logger.warning(
+                    f"Validation error for campground {item.get('name', 'unknown')}: {e}"
+                )
+                continue
+
+        # Create response with validated items and ensure metadata is always present
+        nps_response = NPSResponse[CampgroundData](
+            total=response.get("total", str(len(validated_data))),
+            limit=response.get("limit", str(limit)),
+            start=response.get("start", "0"),
+            data=validated_data,
+        )
 
         # Format the response for better readability
         formatted_campgrounds = format_campground_data(nps_response.data)

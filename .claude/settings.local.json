@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(where:*)",
+      "Bash(poetry run python:*)",
+      "Bash(poetry env info:*)",
+      "Bash(./run_mcp.bat --help)",
+      "Bash(poetry run pytest:*)",
+      "Bash(python -m pytest:*)",
+      "Bash(python:*)"
+    ]
+  }
+}

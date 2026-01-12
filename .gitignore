@@ -72,3 +72,4 @@ mcp_usage.json
 
 # Local development
 config.local.yaml
+*.bat

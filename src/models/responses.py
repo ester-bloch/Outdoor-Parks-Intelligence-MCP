@@ -1,8 +1,8 @@
 """Pydantic models for NPS API responses."""
 
-from typing import Any, Generic, List, TypeVar
+from typing import Any, Generic, List, Optional, TypeVar, Union
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 # Generic type for NPSResponse
 T = TypeVar("T")
@@ -183,20 +183,55 @@ class CampgroundAmenities(BaseModel):
 
     model_config = ConfigDict(populate_by_name=True)
 
-    trash_recycling_collection: bool = Field(alias="trashRecyclingCollection")
+    trash_recycling_collection: Optional[bool] = Field(
+        None, alias="trashRecyclingCollection"
+    )
     toilets: List[str] = Field(default_factory=list)
     internet_connectivity: bool = Field(alias="internetConnectivity")
     showers: List[str] = Field(default_factory=list)
-    cell_phone_reception: bool = Field(alias="cellPhoneReception")
+    cell_phone_reception: Optional[bool] = Field(None, alias="cellPhoneReception")
     laundry: bool
     amphitheater: bool
     dump_station: bool = Field(alias="dumpStation")
     camp_store: bool = Field(alias="campStore")
-    staff_or_volunteer_host_onsite: bool = Field(alias="staffOrVolunteerHostOnsite")
+    staff_or_volunteer_host_onsite: Optional[bool] = Field(
+        None, alias="staffOrVolunteerHostOnsite"
+    )
     potable_water: List[str] = Field(default_factory=list, alias="potableWater")
     ice_available_for_sale: bool = Field(alias="iceAvailableForSale")
     firewood_for_sale: bool = Field(alias="firewoodForSale")
-    food_storage_lockers: bool = Field(alias="foodStorageLockers")
+    food_storage_lockers: Optional[bool] = Field(None, alias="foodStorageLockers")
+
+    @field_validator(
+        "trash_recycling_collection",
+        "staff_or_volunteer_host_onsite",
+        "food_storage_lockers",
+        "cell_phone_reception",
+        mode="before",
+    )
+    @classmethod
+    def parse_boolean_strings(cls, v: Union[str, bool, None]) -> Optional[bool]:
+        """Convert string boolean values from NPS API to actual booleans.
+
+        Handles:
+        - Affirmative strings: "Yes", "YES", "yes", "True", "true", "1" -> True
+        - Negative strings: "No", "NO", "no", "False", "false", "0" -> False
+        - Unknown strings: "Unknown", "N/A", "Not Available", "", None -> None
+        - Already boolean values: pass through unchanged
+        """
+        if v is None or v == "":
+            return None
+        if isinstance(v, bool):
+            return v
+        if isinstance(v, str):
+            v_lower = v.lower().strip()
+            if v_lower in ["yes", "true", "1"]:
+                return True
+            elif v_lower in ["no", "false", "0"]:
+                return False
+            elif v_lower in ["unknown", "n/a", "not available"]:
+                return None
+        return None
 
 
 class Campsites(BaseModel):
@@ -283,10 +318,33 @@ class EventTime(BaseModel):
 
     model_config = ConfigDict(populate_by_name=True)
 
-    time_start: str = Field(alias="timeStart")
-    time_end: str = Field(alias="timeEnd")
-    sunrise_time_start: bool = Field(alias="sunriseTimeStart")
-    sunset_time_end: bool = Field(alias="sunsetTimeEnd")
+    time_start: Optional[str] = Field(None, alias="timeStart")
+    time_end: Optional[str] = Field(None, alias="timeEnd")
+    sunrise_time_start: Optional[bool] = Field(None, alias="sunriseTimeStart")
+    sunset_time_end: Optional[bool] = Field(None, alias="sunsetTimeEnd")
+
+    @field_validator("sunrise_time_start", "sunset_time_end", mode="before")
+    @classmethod
+    def parse_boolean_fields(cls, v: Union[str, bool, None]) -> Optional[bool]:
+        """Convert string boolean values to actual booleans.
+
+        Handles:
+        - Affirmative strings: "Yes", "YES", "yes", "True", "true", "1" -> True
+        - Negative strings: "No", "NO", "no", "False", "false", "0" -> False
+        - Empty/None values: "", None -> None
+        - Already boolean values: pass through unchanged
+        """
+        if v is None or v == "":
+            return None
+        if isinstance(v, bool):
+            return v
+        if isinstance(v, str):
+            v_lower = v.lower().strip()
+            if v_lower in ["yes", "true", "1"]:
+                return True
+            elif v_lower in ["no", "false", "0"]:
+                return False
+        return None
 
 
 class EventData(BaseModel):
@@ -294,37 +352,63 @@ class EventData(BaseModel):
 
     model_config = ConfigDict(populate_by_name=True)
 
+    # Required fields
     id: str
-    url: str
     title: str
+
+    # Optional fields that may be missing from API
+    url: Optional[str] = None
     park_full_name: str = Field(default="", alias="parkFullName")
-    description: str
-    latitude: str
-    longitude: str
-    category: str
-    subcategory: str = Field(default="")
-    location: str
+    description: Optional[str] = None
+    latitude: Optional[str] = None
+    longitude: Optional[str] = None
+    category: Optional[str] = None
+    subcategory: str = Field(default="", alias="subcategory")
+    location: Optional[str] = None
     tags: List[str] = Field(default_factory=list)
     recurrence_date_start: str = Field(default="", alias="recurrenceDateStart")
     recurrence_date_end: str = Field(default="", alias="recurrenceDateEnd")
     times: List[EventTime] = Field(default_factory=list)
     dates: List[str] = Field(default_factory=list)
-    date_start: str = Field(alias="dateStart")
-    date_end: str = Field(alias="dateEnd")
+    date_start: Optional[str] = Field(None, alias="dateStart")
+    date_end: Optional[str] = Field(None, alias="dateEnd")
     regres_url: str = Field(default="", alias="regresurl")
     contact_email_address: str = Field(default="", alias="contactEmailAddress")
     contact_telephone_number: str = Field(default="", alias="contactTelephoneNumber")
     fee_info: str = Field(default="", alias="feeInfo")
-    is_recurring: bool = Field(alias="isRecurring")
-    is_all_day: bool = Field(alias="isAllDay")
+    is_recurring: Optional[bool] = Field(None, alias="isRecurring")
+    is_all_day: Optional[bool] = Field(None, alias="isAllDay")
     site_code: str = Field(default="", alias="siteCode")
-    park_code: str = Field(alias="parkCode")
+    park_code: Optional[str] = Field(None, alias="parkCode")
     organization_name: str = Field(default="", alias="organizationName")
     types: List[str] = Field(default_factory=list)
     create_date: str = Field(default="", alias="createDate")
     last_updated: str = Field(default="", alias="lastUpdated")
     info_url: str = Field(default="", alias="infoURL")
     portal_name: str = Field(default="", alias="portalName")
+
+    @field_validator("is_recurring", "is_all_day", mode="before")
+    @classmethod
+    def parse_boolean_fields(cls, v: Union[str, bool, None]) -> Optional[bool]:
+        """Convert string boolean values to actual booleans.
+
+        Handles:
+        - Affirmative strings: "Yes", "YES", "yes", "True", "true", "1" -> True
+        - Negative strings: "No", "NO", "no", "False", "false", "0" -> False
+        - Empty/None values: "", None -> None
+        - Already boolean values: pass through unchanged
+        """
+        if v is None or v == "":
+            return None
+        if isinstance(v, bool):
+            return v
+        if isinstance(v, str):
+            v_lower = v.lower().strip()
+            if v_lower in ["yes", "true", "1"]:
+                return True
+            if v_lower in ["no", "false", "0"]:
+                return False
+        return None
 
 
 class NPSResponse(BaseModel, Generic[T]):

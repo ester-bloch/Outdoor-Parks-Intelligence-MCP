@@ -78,7 +78,7 @@ class TestFindParksE2E:
             ],
         }
 
-        with patch("src.api.client.get_client") as mock_get_client:
+        with patch("src.handlers.find_parks.get_client") as mock_get_client:
             mock_client = Mock()
             mock_client.get_parks.return_value = mock_response
             mock_get_client.return_value = mock_client
@@ -97,7 +97,7 @@ class TestFindParksE2E:
             park1 = result["parks"][0]
             assert park1["code"] == "yose"
             assert park1["name"] == "Yosemite National Park"
-            assert park1["state"] == "CA"
+            assert "CA" in park1["states"]
             assert "location" in park1
             assert park1["location"]["latitude"] == "37.84883288"
             assert park1["location"]["longitude"] == "-119.5571873"
@@ -105,7 +105,7 @@ class TestFindParksE2E:
             park2 = result["parks"][1]
             assert park2["code"] == "grca"
             assert park2["name"] == "Grand Canyon National Park"
-            assert park2["state"] == "AZ"
+            assert "AZ" in park2["states"]
 
     def test_find_parks_with_activity_filter(self):
         """Test find_parks with activity filtering."""
@@ -142,7 +142,7 @@ class TestFindParksE2E:
             ],
         }
 
-        with patch("src.api.client.get_client") as mock_get_client:
+        with patch("src.handlers.find_parks.get_client") as mock_get_client:
             mock_client = Mock()
             mock_client.get_parks.return_value = mock_response
             mock_get_client.return_value = mock_client
@@ -190,7 +190,7 @@ class TestFindParksE2E:
             ],
         }
 
-        with patch("src.api.client.get_client") as mock_get_client:
+        with patch("src.handlers.find_parks.get_client") as mock_get_client:
             mock_client = Mock()
             mock_client.get_parks.return_value = mock_response
             mock_get_client.return_value = mock_client
@@ -663,11 +663,11 @@ class TestGetCampgroundsE2E:
         """Test complete request/response cycle for get_campgrounds."""
         from src.handlers.get_campgrounds import get_campgrounds
 
-        with patch("src.api.client.get_client") as mock_get_client:
+        with patch("src.handlers.get_campgrounds.get_client") as mock_get_client:
             mock_client = Mock()
             # Mock the handler to return formatted response directly
             mock_client.get_campgrounds.return_value = {
-                "total": "1",
+                "total": "0",
                 "limit": "10",
                 "start": "0",
                 "data": [],  # Empty data to avoid Pydantic validation
@@ -689,7 +689,7 @@ class TestGetCampgroundsE2E:
         """Test get_campgrounds with no campgrounds found."""
         from src.handlers.get_campgrounds import get_campgrounds
 
-        with patch("src.api.client.get_client") as mock_get_client:
+        with patch("src.handlers.get_campgrounds.get_client") as mock_get_client:
             mock_client = Mock()
             mock_client.get_campgrounds.return_value = {
                 "total": "0",

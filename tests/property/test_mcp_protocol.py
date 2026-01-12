@@ -33,10 +33,10 @@ async def test_server_initialization():
     assert hasattr(server.mcp, "name"), "Server should have a name attribute"
     assert server.mcp.name == "National Parks", "Server should have correct name"
 
-    # Verify tools are registered using list_tools method
-    tools = await server.mcp.list_tools()
+    # Verify tools are registered using get_tools method
+    tools = await server.mcp.get_tools()
     assert tools is not None, "Server should have tools registered"
-    assert isinstance(tools, list), "Tools should be a list"
+    assert isinstance(tools, dict), "Tools should be a dictionary"
     assert len(tools) > 0, "Server should have at least one tool registered"
 
 
@@ -66,9 +66,9 @@ async def test_all_tools_registered(tool_name):
     """
     server = get_server()
 
-    # Get the list of registered tools using list_tools method
-    tools = await server.mcp.list_tools()
-    tool_names = [tool.name for tool in tools]
+    # Get the dictionary of registered tools using get_tools method
+    tools = await server.mcp.get_tools()
+    tool_names = list(tools.keys())
 
     assert tool_name in tool_names, f"Tool {tool_name} should be registered"
 
@@ -172,11 +172,11 @@ async def test_tool_has_documentation(tool_name):
     """
     server = get_server()
 
-    # Get all tools using list_tools method
-    tools = await server.mcp.list_tools()
+    # Get all tools using get_tools method
+    tools = await server.mcp.get_tools()
 
     # Find the specific tool
-    tool = next((t for t in tools if t.name == tool_name), None)
+    tool = tools.get(tool_name, None)
 
     assert tool is not None, f"Tool {tool_name} should exist"
 
@@ -200,7 +200,7 @@ async def test_server_handles_multiple_tool_calls():
     # Verify server has multiple tools registered
     expected_tool_count = 9  # We have 9 tools
 
-    tools = await server.mcp.list_tools()
+    tools = await server.mcp.get_tools()
     assert (
         len(tools) >= expected_tool_count
     ), f"Server should have at least {expected_tool_count} tools registered, got {len(tools)}"
